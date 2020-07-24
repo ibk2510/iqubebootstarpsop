@@ -3,12 +3,31 @@ var current_fs, next_fs, previous_fs; //fieldsets
 var left, opacity, scale; //fieldset properties which we will animate
 var animating; //flag to prevent quick multi-click glitches
 
-$(".next").click(function() {
+Array.from(document.getElementsByClassName("next")).forEach(elem => elem.addEventListener("click", function () {
 	if (animating) return false;
 	animating = true;
 
 	current_fs = $(this).parent();
 
+	let id = this.parentNode.id
+
+	console.log(id, "is the id of the current parent node")
+
+	let validation_elements = Array.from(document.getElementsByClassName(id))
+
+	let to_execute = true
+
+	for (var elem of validation_elements) {
+		console.log(elem.value, "is the value of the element")
+		if (elem.value == "") {
+			swal("Oops", `Please fill all Inputs`, "error");
+			console.log(this.enabled, "is the state of the button")
+			to_execute = false
+			animating = false
+		}
+	}
+
+	if (to_execute) {
 
 		console.log("im here")
 		next_fs = $(this).parent().next();
@@ -47,7 +66,8 @@ $(".next").click(function() {
 			//this comes from the custom easing plugin
 			easing: 'easeInOutBack'
 		});
-});
+	}
+}))
 
 $(".previous").click(function () {
 	if (animating) return false;
